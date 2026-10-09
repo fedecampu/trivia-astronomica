@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gran Trivia Astronómica - Feria del Libro Almirante Brown</title>
+  <style>
+    html {
+      scroll-behavior: smooth; /* Desplazamiento suave al hacer clic en el índice */
+    }
+
+    body { 
+      font-family: system-ui, -apple-system, sans-serif; 
+      /* Imagen de fondo fija */
+      background-image: url('espacio.jpg'); 
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-color: #0f172a; 
+      color: #f8fafc; 
+      padding: 20px; 
+      max-width: 950px; 
+      margin: 0 auto; 
+      line-height: 1.5; 
+    }
+    
+    h1 { 
+      text-align: center; 
+      color: #38bdf8; 
+      margin-bottom: 5px; 
+      font-size: 2.2em; 
+      text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    }
+    
+    p.subtitle { 
+      text-align: center; 
+      color: #cbd5e1; 
+      margin-bottom: 20px; 
+      font-size: 1.1em; 
+      text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    }
+
+    /* Estilos del Panel de Índice */
+    .index-container {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #0284c7;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 35px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .index-title {
+      text-align: center;
+      color: #38bdf8;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .index-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 10px;
+    }
+
+    .index-item {
+      background: rgba(30, 41, 59, 0.7);
+      padding: 10px 14px;
+      border-radius: 6px;
+      border-left: 4px solid #38bdf8;
+      text-decoration: none;
+      color: #f1f5f9;
+      font-size: 0.95em;
+      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .index-item:hover {
+      background: rgba(56, 189, 248, 0.2);
+      transform: translateX(3px);
+      color: #38bdf8;
+    }
+
+    .index-range {
+      font-size: 0.8em;
+      background: #0284c7;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+    
+    /* Bloques de sección semi-transparentes */
+    .block-title { 
+      background: rgba(30, 41, 59, 0.85); 
+      color: #38bdf8; 
+      padding: 14px 20px; 
+      border-radius: 8px; 
+      margin: 35px 0 15px 0; 
+      border-left: 5px solid #0284c7; 
+      font-size: 1.3em; 
+      font-weight: bold; 
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    
+    /* Tarjetas de preguntas semi-transparentes */
+    .card { 
+      background: rgba(30, 41, 59, 0.45); 
+      border-radius: 8px; 
+      padding: 16px 20px; 
+      margin-bottom: 12px; 
+      cursor: pointer; 
+      border: 1px solid rgba(255, 255, 255, 0.15); 
+      transition: background 0.2s, transform 0.1s, border-color 0.2s; 
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    
+    .card:hover { 
+      background: rgba(51, 65, 85, 0.88); 
+      transform: translateY(-2px); 
+      border-color: #38bdf8;
+    }
+    
+    .q-header { 
+      font-weight: bold; 
+      color: #38bdf8; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 8px; 
+    }
+    
+    .q-text { 
+      font-size: 1.1em; 
+      color: #f1f5f9; 
+    }
+    
+    .answer { 
+      display: none; 
+      margin-top: 12px; 
+      padding: 12px 15px; 
+      background: rgba(6, 78, 59, 0.9); 
+      color: #6ee7b7; 
+      border-radius: 6px; 
+      font-weight: 600; 
+      border-left: 4px solid #10b981; 
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    
+    .badge { 
+      padding: 3px 10px; 
+      border-radius: 12px; 
+      font-size: 0.8em; 
+      font-weight: bold; 
+      color: white; 
+    }
+    .badge-facil { background: #16a34a; }
+    .badge-intermedio { background: #ca8a04; }
+    .badge-avanzado { background: #dc2626; }
+    .badge-argentina { background: #0284c7; }
+    .badge-desafio { background: #9333ea; }
+    
+    .footer { 
+      text-align: center; 
+      padding: 40px 20px 20px; 
+      color: #cbd5e1; 
+      background: rgba(30, 41, 59, 0.88); 
+      border-radius: 12px; 
+      margin-top: 40px; 
+      border: 1px solid rgba(255, 255, 255, 0.2); 
+      backdrop-filter: blur(5px);
+    }
+    .footer h2 { color: #38bdf8; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+<h1>🌌 Gran Trivia Astronómica</h1>
+<p style="text-align: center; color: #38bdf8; font-size: 0.9em; margin-top: -5px; font-weight: 600;">
+  Un contenido creado por Federico Campuzano Castro, Doctor en Astronomía por la UNLP ®
+</p>
+<p class="subtitle">Feria del Libro • Partido de Almirante Brown | Haz clic en cualquier pregunta para desplegar la respuesta</p>
+
+  <!-- PANEL DE ÍNDICE DE BLOQUES -->
+  <div class="index-container">
+    <div class="index-title">📋 ÍNDICE DE TEMAS Y BLOQUES</div>
+    <div class="index-grid">
+      <a href="#bloque-1" class="index-item"><span>Bloque 1: El Sistema Solar</span> <span class="index-range">P1 - P20</span></a>
+      <a href="#bloque-2" class="index-item"><span>Bloque 2: Estrellas y Astrofísica</span> <span class="index-range">P21 - P40</span></a>
+      <a href="#bloque-3" class="index-item"><span>Bloque 3: Galaxias y Universo</span> <span class="index-range">P41 - P60</span></a>
+      <a href="#bloque-4" class="index-item"><span>Bloque 4: Astronomía Argentina</span> <span class="index-range">P61 - P80</span></a>
+      <a href="#bloque-5" class="index-item"><span>Bloque 5: Semana del Espacio</span> <span class="index-range">P81 - P100</span></a>
+      <a href="#bloque-6" class="index-item"><span>Bloque 6: La Luna y la Tierra</span> <span class="index-range">P101 - P120</span></a>
+      <a href="#bloque-7" class="index-item"><span>Bloque 7: Telescopios</span> <span class="index-range">P121 - P140</span></a>
+      <a href="#bloque-8" class="index-item"><span>Bloque 8: Misiones y Exoplanetas</span> <span class="index-range">P141 - P160</span></a>
+    </div>
+  </div>
+
+  <div id="trivia-container"></div>
+
+<div class="footer">
+  <h2>¡¡Muchas gracias por participar!! 🚀</h2>
+  <p style="font-size: 1.2em; font-weight: bold; color: #facc15;">¡Aguante la Astronomía y la ciencia!</p>
+  
+  <!-- MARCA Y PROPIEDAD INTELECTUAL -->
+  <p style="margin-top: 15px; font-size: 0.95em; color: #cbd5e1;">
+    Desarrollado por <strong> Federico Campuzano Castro / UNaB</strong> © 2026. Todos los derechos reservados. ®
+  </p>
+  
+  <p>Muchas gracias a todos los chicos, chicas y familias por participar en la trivia de astronomía y el espacio en el stand de Ciencia y Tecnología.</p>
+  <p style="color: #38bdf8; font-weight: 600; margin-top: 15px;">#MesDeLaAstronomiaArgentina #SemanaDelEspacio</p>
+</div>
+  <script>
+    const triviaData = [
+      {
+        id: "bloque-1",
+        block: "Bloque 1: El Sistema Solar y sus Vecinos (Preguntas 1 a 20)",
+        items: [
+          { id: "P1", level: "Fácil", q: "¿Qué planeta es más grande: Tierra, Venus o Marte?", a: "La Tierra (Venus le sigue muy cerca y Marte es casi la mitad)." },
+          { id: "P2", level: "Fácil", q: "¿Cuál es el planeta con mayor masa de todo el Sistema Solar?", a: "Júpiter (supera la suma de todos los demás planetas juntos)." },
+          { id: "P3", level: "Intermedio", q: "¿Cuál es el planeta con la temperatura promedio más alta?", a: "Venus (debido a su denso efecto invernadero, alcanza 465 °C)." },
+          { id: "P4", level: "Fácil", q: "¿Por qué Marte se ve de color rojizo desde la Tierra?", a: "Por la abundancia de óxido de hierro (herrumbre) en su suelo." },
+          { id: "P5", level: "Intermedio", q: "¿Dónde se encuentra el Gran Cinturón de Asteroides principal?", a: "Entre las órbitas de Marte y Júpiter." },
+          { id: "P6", level: "Fácil", q: "¿Qué planeta posee el sistema de anillos más grande y brillante?", a: "Saturno (compuestos mayormente por partículas de hielo y roca)." },
+          { id: "P7", level: "Intermedio", q: "¿Cuál es la montaña o volcán más alto del Sistema Solar?", a: "El Monte Olimpo en Marte (supera los 21 km de altura)." },
+          { id: "P8", level: "Avanzado", q: "¿Qué planeta gira 'de costado' con un eje inclinado casi 98°?", a: "Urano." },
+          { id: "P9", level: "Fácil", q: "¿En qué año Plutón pasó a clasificarse como 'planeta enano'?", a: "En el año 2006 por la Unión Astronómica Internacional." },
+          { id: "P10", level: "Intermedio", q: "¿Cuál es la luna más grande de todo el Sistema Solar?", a: "Ganímedes (satélite de Júpiter, más grande que Mercurio)." },
+          { id: "P11", level: "Avanzado", q: "¿Qué luna de Saturno posee géiseres de agua e hielo en el polo sur?", a: "Encélado." },
+          { id: "P12", level: "Fácil", q: "¿De qué están hechos principalmente los cometas?", a: "De hielo, polvo y compuestos orgánicos ('bolas de nieve sucia')." },
+          { id: "P13", level: "Fácil", q: "¿Cuál es el planeta más cercano al Sol?", a: "Mercurio." },
+          { id: "P14", level: "Intermedio", q: "¿Cómo se llama la famosa tormenta gigante que dura hace siglos en Júpiter?", a: "La Gran Mancha Roja." },
+          { id: "P15", level: "Intermedio", q: "¿Qué luna de Júpiter tiene la mayor actividad volcánica activa del Sistema Solar?", a: "Ío." },
+          { id: "P16", level: "Avanzado", q: "¿Cómo se llama la región helada más allá de Neptuno de donde provienen los cometas de corto período?", a: "El Cinturón de Kuiper." },
+          { id: "P17", level: "Fácil", q: "¿Cuántos planetas confirmados componen actualmente el Sistema Solar?", a: "8 planetas." },
+          { id: "P18", level: "Intermedio", q: "¿Qué planeta tiene vientos supersónicos que alcanzan los 2.100 km/h?", a: "Neptuno." },
+          { id: "P19", level: "Avanzado", q: "¿Qué gigantesca nube esférica hipotética rodea al Sistema Solar a casi 1 año luz?", a: "La Nube de Oort." },
+          { id: "P20", level: "Intermedio", q: "¿Qué satélite natural de Saturno posee una densa atmósfera rica en nitrógeno y mares de metano?", a: "Titán." }
+        ]
+      },
+      {
+        id: "bloque-2",
+        block: "Bloque 2: Estrellas y Astrofísica Básica (Preguntas 21 a 40)",
+        items: [
+          { id: "P21", level: "Intermedio", q: "¿Una estrella azul es más o menos masiva/caliente que una amarilla?", a: "Es más masiva y mucho más caliente en su superficie." },
+          { id: "P22", level: "Fácil", q: "¿Cuál es la estrella más cercana al planeta Tierra?", a: "El Sol (la siguiente es Próxima Centauri a 4.24 años luz)." },
+          { id: "P23", level: "Intermedio", q: "¿Qué proceso nuclear genera la energía dentro del núcleo del Sol?", a: "Fusión nuclear de átomos de hidrógeno en helio." },
+          { id: "P24", level: "Avanzado", q: "¿Qué explosión cataclísmica marca la muerte de una estrella masiva?", a: "Una Supernova." },
+          { id: "P25", level: "Intermedio", q: "¿En qué etapa terminará la vida del Sol dentro de 5.000 millones de años?", a: "Gigante Roja y luego remanente de Enana Blanca." },
+          { id: "P26", level: "Avanzado", q: "¿Qué es un Púlsar?", a: "Una estrella de neutrones que gira rápidamente emitiendo pulsos de radiación." },
+          { id: "P27", level: "Fácil", q: "¿Qué color de estrella tiene la temperatura superficial más baja?", a: "Las estrellas rojas (alrededor de 3.000 K)." },
+          { id: "P28", level: "Intermedio", q: "¿Cómo se llaman las 'nubes' de gas y polvo donde nacen las estrellas?", a: "Nebulosas estelares o criaderos estelares." },
+          { id: "P29", level: "Avanzado", q: "¿Qué límite define el punto de no retorno alrededor de un agujero negro?", a: "El Horizonte de Sucesos (o de Eventos)." },
+          { id: "P30", level: "Fácil", q: "¿A qué velocidad viaja la luz en el vacío?", a: "A casi 300.000 kilómetros por segundo." },
+          { id: "P31", level: "Intermedio", q: "¿Cuánto tarda la luz del Sol en llegar a la Tierra?", a: "Aproximadamente 8 minutos y 20 segundos." },
+          { id: "P32", level: "Avanzado", q: "¿Cuál es la constelación donde se ubica la estrella gigante Betelgeuse?", a: "Orión el Cazador." },
+          { id: "P33", level: "Fácil", q: "¿Cuál es la estrella más brillante del cielo nocturno vista desde la Tierra?", a: "Sirio (en la constelación del Can Mayor)." },
+          { id: "P34", level: "Intermedio", q: "¿Qué diagrama fundamental clasifica a las estrellas según su luminosidad y temperatura?", a: "El Diagrama Hertzsprung-Russell (H-R)." },
+          { id: "P35", level: "Avanzado", q: "¿Qué estado cuántico de la materia sostiene a las estrellas enanas blancas frente al colapso gravitatorio?", a: "La presión de degeneración de electrones." },
+          { id: "P36", level: "Fácil", q: "¿Qué es una estrella fugaz en realidad?", a: "Un meteoro (pequeño fragmento de roca o polvo ardiendo al entrar a la atmósfera)." },
+          { id: "P37", level: "Intermedio", q: "¿Qué tipo de estrella de neutrones posee campos magnéticos hiperintensos?", a: "Un Magnetar." },
+          { id: "P38", level: "Avanzado", q: "¿Qué límite matemático determina la masa máxima de una estrella de neutrones antes de colapsar en un agujero negro?", a: "El límite de Tolman-Oppenheimer-Volkoff (TOV)." },
+          { id: "P39", level: "Fácil", q: "¿En qué estado de la materia se encuentra el gas ionizado del Sol?", a: "Plasma." },
+          { id: "P40", level: "Intermedio", q: "¿Qué son las manchas solares que aparecen en la superficie del Sol?", a: "Regiones más 'frías' causadas por intensas concentraciones del campo magnético." }
+        ]
+      },
+      {
+        id: "bloque-3",
+        block: "Bloque 3: Galaxias, Agujeros Negros y Universo (Preguntas 41 a 60)",
+        items: [
+          { id: "P41", level: "Fácil", q: "¿Cómo se llama la galaxia en la que vivimos?", a: "Vía Láctea." },
+          { id: "P42", level: "Intermedio", q: "¿Qué tipo o forma de galaxia es la Vía Láctea?", a: "Galaxia espiral barrada." },
+          { id: "P43", level: "Intermedio", q: "¿Cuál es la galaxia espiral grande más cercana a la Vía Láctea?", a: "Galaxia de Andrómeda (M31)." },
+          { id: "P44", level: "Avanzado", q: "¿Cómo se llama el agujero negro supermasivo en el centro de la Vía Láctea?", a: "Sagitario A* (Sagittarius A-estrella)." },
+          { id: "P45", level: "Fácil", q: "¿Qué sostiene a las galaxias unidas y evita que se desarmen?", a: "La fuerza de atracción gravitatoria." },
+          { id: "P46", level: "Intermedio", q: "¿Cuál es la edad aproximada del Universo observable?", a: "Unos 13.800 millones de años." },
+          { id: "P47", level: "Avanzado", q: "¿Qué componente invisible constituye cerca del 85% de la materia cósmica?", a: "La Materia Oscura." },
+          { id: "P48", level: "Fácil", q: "¿Qué teoría científica explica el origen del Universo en expansión?", a: "La Teoría del Big Bang (o Gran Explosión)." },
+          { id: "P49", level: "Intermedio", q: "¿Qué son las dos Nubes de Magallanes visibles desde el hemisferio sur?", a: "Galaxias enanas satélites que orbitan la Vía Láctea." },
+          { id: "P50", level: "Avanzado", q: "¿Qué fuerza acelera la expansión actual del Universo?", a: "La Energía Oscura." },
+          { id: "P51", level: "Fácil", q: "¿Puede la luz escapar del interior de un agujero negro?", a: "No, debido a la intensa atracción gravitatoria." },
+          { id: "P52", level: "Intermedio", q: "¿Qué instrumento internacional obtuvo la primera imagen de un agujero negro en 2019?", a: "El Event Horizon Telescope (EHT)." },
+          { id: "P53", level: "Fácil", q: "¿En qué supercúmulo de galaxias se encuentra ubicada nuestra Vía Láctea?", a: "El Supercúmulo de Laniakea." },
+          { id: "P54", level: "Intermedio", q: "¿Qué fenómeno curva la luz de objetos distantes debido a la gravedad de una galaxia masiva?", a: "Lente gravitacional." },
+          { id: "P55", level: "Avanzado", q: "¿Qué son los Quásares?", a: "Núcleos galácticos activos ultra luminosos alimentados por agujeros negros supermasivos." },
+          { id: "P56", level: "Intermedio", q: "¿Quién descubrió en 1929 que las galaxias distantes se alejan unas de otras?", a: "Edwin Hubble." },
+          { id: "P57", level: "Avanzado", q: "¿Qué es el 'Redshift' o Corrimiento al Rojo espectral?", a: "El estiramiento de las ondas de luz hacia el rojo producido por la expansión del espacio." },
+          { id: "P58", level: "Fácil", q: "¿Qué sucederá dentro de 4.500 millones de años entre la Vía Láctea y Andrómeda?", a: "Se fusionarán formando una sola galaxia gigante." },
+          { id: "P59", level: "Intermedio", q: "¿Qué agujero negro de la galaxia M87 fue fotografiado por primera vez en la historia?", a: "El agujero negro de M87*." },
+          { id: "P60", level: "Avanzado", q: "¿Qué teórica radiación térmica teorizó Stephen Hawking que emiten los agujeros negros?", a: "La Radiación de Hawking." }
+        ]
+      },
+      {
+        id: "bloque-4",
+        block: "Bloque 4: Especial Mes de la Astronomía Argentina (Preguntas 61 a 80)",
+        items: [
+          { id: "P61", level: "Argentina", q: "¿En qué provincia se inauguró el primer observatorio nacional en 1871?", a: "Córdoba (Observatorio Astronómico de Córdoba)." },
+          { id: "P62", level: "Argentina", q: "¿Bajo qué presidencia argentina se creó el Observatorio de Córdoba?", a: "Domingo Faustino Sarmiento." },
+          { id: "P63", level: "Argentina", q: "¿Quién fue el primer director astronómico del Observatorio de Córdoba?", a: "El astrónomo estadounidense Benjamín Apthorp Gould." },
+          { id: "P64", level: "Argentina", q: "¿Por qué se celebra el Día Nacional de la Astronomía el 24 de Octubre?", a: "En conmemoración a la inauguración del Observatorio en 1871." },
+          { id: "P65", level: "Argentina", q: "¿Qué famoso catálogo de estrellas del cielo sur elaboró el Observatorio?", a: "La Uranometría Argentina (1879)." },
+          { id: "P66", level: "Argentina", q: "¿Dónde se encuentra el Gran Telescopio CASLEO en Argentina?", a: "En El Leoncito, provincia de San Juan." },
+          { id: "P67", level: "Argentina", q: "¿En qué provincia se ubica el Observatorio de Rayos Cósmicos Pierre Auger?", a: "En Malargüe, provincia de Mendoza." },
+          { id: "P68", level: "Argentina", q: "¿Qué gran radiotelescopio se construye en San Juan con una antena de 40m?", a: "El telescopio CART (Radioastronómico Chino-Argentino)." },
+          { id: "P69", level: "Argentina", q: "¿Dónde se ubica el Proyecto LLAMA a más de 4800 msnm?", a: "En Alto Chorrillos, provincia de Salta." },
+          { id: "P70", level: "Argentina", q: "¿Cuál fue el primer instituto universitario en dictar la carrera de Astronomía?", a: "La Universidad Nacional de La Plata (UNLP, 1935)." },
+          { id: "P71", level: "Argentina", q: "¿Qué célebre astrónomo argentino publicó el Atlas de Galaxias Australes?", a: "El Dr. José Luis Sérsic." },
+          { id: "P72", level: "Argentina", q: "¿Qué emblemático Planetario se inauguró en Buenos Aires en 1966?", a: "El Planetario Galileo Galilei en Palermo." },
+          { id: "P73", level: "Argentina", q: "¿En qué provincia funciona el Instituto Argentino de Radioastronomía (IAR)?", a: "En el Parque Pereyra Iraola, provincia de Buenos Aires (Berazategui)." },
+          { id: "P74", level: "Argentina", q: "¿Qué observatorio astronómico histórico bonaerense fue fundado en 1883?", a: "El Observatorio Astronómico de La Plata." },
+          { id: "P75", level: "Argentina", q: "¿Qué estación astrofísica cordobesa alberga el reflector espectrográfico de 1.54 metros?", a: "La Estación Astrofísica de Bosque Alegre." },
+          { id: "P76", level: "Argentina", q: "¿Qué destacado astrónomo argentino presidió la Unión Astronómica Internacional entre 1985 y 1988?", a: "El Dr. Jorge Sahade." },
+          { id: "P77", level: "Argentina", q: "¿Qué complejo astronómico en San Juan lleva el nombre de un pionero de la astronomía argentina?", a: "El Complejo Astronómico Félix Aguilar (OAFA)." },
+          { id: "P78", level: "Argentina", q: "¿Qué asteroide fue nombrado en honor a la ciudad balnearia argentina donde funciona una conocida asociación astronómica?", a: "El asteroide (2297) Daghestan o reconocimientos a la Asociación Entrerriana / Mar del Plata." },
+          { id: "P79", level: "Argentina", q: "¿Qué proyecto científico internacional instalado en los Andes salteños busca detectar modos B del CMB?", a: "El Proyecto QUBIC en San Antonio de los Cobres." },
+          { id: "P80", level: "Argentina", q: "¿Qué institución coordina anualmente la Olimpiada Argentina de Astronomía?", a: "El Observatorio Astronómico de Córdoba (OAC) y la FCFAG (UNLP)." }
+        ]
+      },
+      {
+        id: "bloque-5",
+        block: "Bloque 5: Semana del Espacio y Satélites (Preguntas 81 a 100)",
+        items: [
+          { id: "P81", level: "Fácil", q: "¿Qué agencia espacial oficial pertenece a la República Argentina?", a: "CONAE (Comisión Nacional de Actividades Espaciales)." },
+          { id: "P82", level: "Argentina", q: "¿Qué radares de apertura sintética en banda L llevan los satélites SAOCOM?", a: "Radares microondas para medir humedad del suelo e emergencias." },
+          { id: "P83", level: "Fácil", q: "¿Qué hito marcó el inicio de la Semana Mundial del Espacio el 4 de Octubre de 1957?", a: "El lanzamiento del Sputnik 1, el primer satélite artificial." },
+          { id: "P84", level: "Intermedio", q: "¿A qué altura promedio orbita la Estación Espacial Internacional (EEI)?", a: "A unos 400 kilómetros de la superficie terrestre." },
+          { id: "P85", level: "Argentina", q: "¿Cómo se llaman los satélites geoestacionarios de telecomunicaciones de Argentina?", a: "ARSAT-1 y ARSAT-2." },
+          { id: "P86", level: "Intermedio", q: "¿A qué distancia se encuentra una órbita geoestacionaria?", a: "A aproximadamente 35.786 kilómetros de la Tierra." },
+          { id: "P87", level: "Fácil", q: "¿Quién fue el primer ser humano en viajar al espacio exterior en 1961?", a: "Yuri Gagarin (a bordo de la nave Vostok 1)." },
+          { id: "P88", level: "Fácil", q: "¿Quién fue la primera mujer astronavegante en viajar al espacio?", a: "Valentina Tereshkova en 1963." },
+          { id: "P89", level: "Intermedio", q: "¿Qué tratado internacional de 1967 rige el uso pacífico del espacio?", a: "El Tratado del Espacio Ultraterrestre (entrado en vigor el 10 de octubre)." },
+          { id: "P90", level: "Avanzado", q: "¿En qué ciudad argentina se construyó el centro de control e integración INVAP?", a: "En San Carlos de Bariloche, provincia de Río Negro." },
+          { id: "P91", level: "Intermedio", q: "¿Cuánto tiempo tarda la Estación Espacial Internacional en dar una vuelta completa a la Tierra?", a: "Aproximadamente 90 minutos." },
+          { id: "P92", level: "Avanzado", q: "¿Qué lanzador experimental argentino se prueba en la base de Pipinas?", a: "El cohete Tronador II." },
+          { id: "P93", level: "Fácil", q: "¿Qué red satelital de posicionamiento global pertenece a Estados Unidos?", a: "GPS (Global Positioning System)." },
+          { id: "P94", level: "Intermedio", q: "¿Qué satélite científico argentino lanzado en 2011 midió la salinidad de los océanos?", a: "El SAC-D / Aquarius." },
+          { id: "P95", level: "Avanzado", q: "¿Qué constelación satelital privada argentina de nanosatélites desarrolla la empresa Satellogic?", a: "La constelación Aleph-1 (satélites ÑuSat)." },
+          { id: "P96", level: "Fácil", q: "¿Qué es la 'Basura Espacial' o chatarra orbital?", a: "Restos de cohetes, satélites inactivos y fragmentos flotando en órbita." },
+          { id: "P97", level: "Intermedio", q: "¿Qué centro de la CONAE en Córdoba gestiona el control orbital de satélites?", a: "El Centro Espacial Teófilo Tabanera (CETT) en Falda del Cañete." },
+          { id: "P98", level: "Avanzado", q: "¿Qué experimento universitario estudiantil argentino fue lanzado al espacio en el proyecto Lusat-1 en 1990?", a: "LUSAT-1 (primer satélite argentino construido por radioaficionados)." },
+          { id: "P99", level: "Fácil", q: "¿Cómo se llama la fuerza que frena las naves espaciales al reingresar a la atmósfera?", a: "Fricción o rozamiento atmosférico." },
+          { id: "P100", level: "Intermedio", q: "¿Qué tipo de traje usan los astronautas para hacer caminatas fuera de la nave?", a: "Traje de Actividad Extravehicular (EVA)." }
+        ]
+      },
+      {
+        id: "bloque-6",
+        block: "Bloque 6: La Luna y Movimientos Terrestres (Preguntas 101 a 120)",
+        items: [
+          { id: "P101", level: "Intermedio", q: "¿Cuál es la causa principal de que existan las estaciones del año?", a: "La inclinación del eje de rotación de la Tierra (~23.5°)." },
+          { id: "P102", level: "Fácil", q: "¿Por qué no podemos ver la cara oculta de la Luna desde la Tierra?", a: "Por la rotación sincrónica (tarda lo mismo en rotar que en trasladarse)." },
+          { id: "P103", level: "Fácil", q: "¿Qué tipo de eclipse ocurre cuando la Luna tapa completamente al Sol?", a: "Eclipse Solar Total." },
+          { id: "P104", level: "Intermedio", q: "¿Por qué la Luna se torna rojiza durante un eclipse total de Luna?", a: "La atmósfera terrestre dispersa la luz y proyecta tonos rojos (Dispersión de Rayleigh)." },
+          { id: "P105", level: "Intermedio", q: "¿Qué fuerza genera el fenómeno de las mareas en los océanos?", a: "La atracción gravitatoria combinada de la Luna y el Sol." },
+          { id: "P106", level: "Fácil", q: "¿Cuántos días tarda aproximadamente la Luna en completar sus fases?", a: "Unos 29.5 días (período sinódico)." },
+          { id: "P107", level: "Avanzado", q: "¿Cómo se denomina el movimiento cónico lento del eje de rotación terrestre?", a: "Precesión de los equinoccios (tarda ~25.776 años)." },
+          { id: "P108", level: "Fácil", q: "¿En qué fase lunar puede ocurrir un eclipse de Luna?", a: "Solo en fase de Luna Llena." },
+          { id: "P109", level: "Fácil", q: "¿En qué fase lunar puede ocurrir un eclipse de Sol?", a: "Solo en fase de Luna Nueva." },
+          { id: "P110", level: "Intermedio", q: "¿Cómo se llama la teoría más aceptada sobre el origen de la Luna?", a: "Hipótesis del Gran Impacto (choque con un protoplaneta llamado Theia)." },
+          { id: "P111", level: "Avanzado", q: "¿Cuál es la distancia media aproximada entre la Tierra y la Luna?", a: "Unos 384.400 kilómetros." },
+          { id: "P112", level: "Intermedio", q: "¿Qué son las 'Mareas Vivas' o plenas?", a: "Mareas más altas cuando el Sol, la Tierra y la Luna están alineados." },
+          { id: "P113", level: "Fácil", q: "¿Cómo se llaman las zonas oscuras y llanas de basalto en la Luna?", a: "Mares lunares (Maria)." },
+          { id: "P114", level: "Intermedio", q: "¿Qué punto de la órbita de la Luna está más cercano a la Tierra?", a: "Perigeo." },
+          { id: "P115", level: "Intermedio", q: "¿Qué punto de la órbita de la Luna está más alejado de la Tierra?", a: "Apogeo." },
+          { id: "P116", level: "Avanzado", q: "¿Qué es el bamboleo o pequeña oscilación adicional del eje terrestre descubierto por Seth Chandler?", a: "El Bamboleo de Chandler." },
+          { id: "P117", level: "Fácil", q: "¿En qué dos días del año el día y la noche duran exactamente lo mismo?", a: "En los Equinoccios (Primavera y Otoño)." },
+          { id: "P118", level: "Intermedio", q: "¿Qué día ocurre el día más largo del año en el hemisferio sur?", a: "En el Solsticio de Verano (21 de diciembre aproximadamente)." },
+          { id: "P119", level: "Avanzado", q: "¿Qué oscilación periódica rápida se superpone al movimiento de precesión de la Tierra?", a: "La Nutación (causada por la atracción de la Luna)." },
+          { id: "P120", level: "Fácil", q: "¿Por qué hay un día bisiesto cada 4 años en febrero?", a: "Porque el año trópico terrestre dura ~365.2422 días (6 horas extra al año)." }
+        ]
+      },
+      {
+        id: "bloque-7",
+        block: "Bloque 7: Telescopios e Instrumentación (Preguntas 121 a 140)",
+        items: [
+          { id: "P121", level: "Fácil", q: "¿Quién fue el primero en usar un telescopio para observaciones astronómicas en 1609?", a: "Galileo Galilei." },
+          { id: "P122", level: "Intermedio", q: "¿Qué famoso telescopio espacial infrarrojo fue lanzado a fines de 2021?", a: "Telescopio Espacial James Webb (JWST)." },
+          { id: "P123", level: "Fácil", q: "¿Qué telescopio espacial histórico lanzado en 1990 revolucionó las fotos del cosmos?", a: "Telescopio Espacial Hubble." },
+          { id: "P124", level: "Intermedio", q: "¿Cuál es la diferencia entre un telescopio Refractor y uno Reflector?", a: "El refractor usa lentes de vidrio; el reflector usa espejos cóncavos." },
+          { id: "P125", level: "Avanzado", q: "¿Quién inventó el telescopio reflector de espejo cóncavo?", a: "Isaac Newton (1668)." },
+          { id: "P126", level: "Intermedio", q: "¿Por qué se construyen los grandes observatorios en cumbres altas y secas?", a: "Para evitar la humedad, contaminación lumínica y turbulencia atmosférica." },
+          { id: "P127", level: "Avanzado", q: "¿En qué punto de Lagrange se encuentra orbitando el telescopio James Webb?", a: "En el Punto de Lagrange L2 (a 1.5 millones de km)." },
+          { id: "P128", level: "Fácil", q: "¿Qué detectan los Radiotelescopios?", a: "Ondas de radio emitidas por objetos celestes." },
+          { id: "P129", level: "Intermedio", q: "¿Dónde se encuentra el observatorio gigante ALMA?", a: "En el Desierto de Atacama, Chile (a 5.000 metros de altura)." },
+          { id: "P130", level: "Avanzado", q: "¿Qué técnica combina datos de varios telescopios para simular uno gigante?", a: "Interferometría astronómica." },
+          { id: "P131", level: "Fácil", q: "¿Qué es la contaminación lumínica?", a: "El brillo artificial del cielo nocturno causado por alumbrado ineficiente." },
+          { id: "P132", level: "Intermedio", q: "¿Qué instrumento descompone la luz estelar en colores para estudiar su química?", a: "Un Espectrógrafo." },
+          { id: "P133", level: "Avanzado", q: "¿Qué sistema de ópticas corrige la turbulencia atmosférica en tiempo real con láseres?", a: "Óptica Adaptativa." },
+          { id: "P134", level: "Fácil", q: "¿Qué tipo de sensor electrónico en las cámaras astronómicas reemplazó a las placas fotográficas?", a: "Sensor CCD (o CMOS)." },
+          { id: "P135", level: "Intermedio", q: "¿Qué gran telescopio óptico de 39 metros construye Europa en el desierto chileno?", a: "El ELT (Extremely Large Telescope)." },
+          { id: "P136", level: "Avanzado", q: "¿Qué observatorio espacial de la ESA analiza la posición y distancia de más de 1.000 millones de estrellas?", a: "Misión GAIA." },
+          { id: "P137", level: "Fácil", q: "¿Qué ocular o accesorio se coloca en un telescopio para reducir la luz intensa de la Luna?", a: "Filtro Lunar." },
+          { id: "P138", level: "Intermedio", q: "¿Qué filtro de telescopio permite observar las llamaradas e hidrógenos en la superficie del Sol de forma segura?", a: "Filtro Solar de Hidrógeno-Alfa (H-alfa)." },
+          { id: "P139", level: "Avanzado", q: "¿Qué observatorio chileno inaugurado con el legado de Vera Rubin realizará un rastreo del cielo austral cada pocas noches?", a: "Observatorio Vera C. Rubin (LSST)." },
+          { id: "P140", level: "Intermedio", q: "¿Cómo se llama la montura telescópica alineada con el eje de rotación de la Tierra?", a: "Montura Ecuatorial." }
+        ]
+      },
+      {
+        id: "bloque-8",
+        block: "Bloque 8: Misiones, Exploración y Exoplanetas (Preguntas 141 a 160)",
+        items: [
+          { id: "P141", level: "Fácil", q: "¿Qué misiones de la NASA llevaron a los primeros hombres a la Luna?", a: "El Programa Apolo (Apolo 11 en julio de 1969)." },
+          { id: "P142", level: "Fácil", q: "¿Quién fue el primer ser humano en pisar la superficie lunar?", a: "Neil Armstrong." },
+          { id: "P143", level: "Intermedio", q: "¿Cómo se llamaba el helicóptero experimental que voló en Marte en 2021?", a: "Ingenuity (junto al rover Perseverance)." },
+          { id: "P144", level: "Intermedio", q: "¿Qué sonda espacial de 1977 ha cruzado el espacio interestelar?", a: "Voyager 1 (lleva un disco de oro con datos de la Tierra)." },
+          { id: "P145", level: "Avanzado", q: "¿Qué es un Exoplaneta?", a: "Un planeta que orbita una estrella diferente a nuestro Sol." },
+          { id: "P146", level: "Intermedio", q: "¿En qué año se descubrió el primer exoplaneta orbitando una estrella similar al Sol?", a: "En 1995 (51 Pegasi b, galardonado con el Premio Nobel)." },
+          { id: "P147", level: "Fácil", q: "¿Se puede escuchar sonido en el vacío del espacio exterior?", a: "No, el sonido requiere un medio material (aire/agua) para propagarse." },
+          { id: "P148", level: "Avanzado", q: "¿Qué misión impactó un asteroide en 2022 para probar defensa planetaria?", a: "La misión DART de la NASA (impactó a Dimorphos)." },
+          { id: "P149", level: "Intermedio", q: "¿Qué planeta enano visitó la sonda New Horizons en el año 2015?", a: "Plutón (revelando su famoso 'corazón' de hielo de nitrógeno)." },
+          { id: "P150", level: "Fácil", q: "¿Qué animal fue el primer ser vivo en orbitar la Tierra en 1957?", a: "La perra Laika a bordo del Sputnik 2." },
+          { id: "P151", level: "Avanzado", q: "¿Qué sistema planetario cercano posee 7 planetas rocosos de tamaño terrestre?", a: "TRAPPIST-1." },
+          { id: "P152", level: "Intermedio", q: "¿Cómo se llama el programa actual de la NASA para regresar a la Luna?", a: "Programa Artemis (Artemisa)." },
+          { id: "P153", level: "Fácil", q: "¿Qué vehículo explorador de la NASA aterrizó en Marte en 2012 y aún funciona?", a: "Curiosity." },
+          { id: "P154", level: "Intermedio", q: "¿Qué método de detección de exoplanetas mide la disminución del brillo de la estrella cuando el planeta pasa frente a ella?", a: "Método de Tránsito." },
+          { id: "P155", level: "Avanzado", q: "¿Cómo se llama la zona alrededor de una estrella donde un planeta puede albergar agua líquida?", a: "Zona de Habitabilidad (o 'Zona Ricitos de Oro')." },
+          { id: "P156", level: "Intermedio", q: "¿Qué sonda espacial orbitó Júpiter entre 1995 y 2003 liberando un módulo en su atmósfera?", a: "La sonda Galileo." },
+          { id: "P157", level: "Avanzado", q: "¿Qué misión conjunta NASA/ESA orbitó Saturno y descendió la sonda Huygens en Titán?", a: "Misión Cassini-Huygens." },
+          { id: "P158", level: "Fácil", q: "¿Qué compañía privada lanzó los primeros cohetes comerciales reutilizables (Falcon 9)?", a: "SpaceX." },
+          { id: "P159", level: "Intermedio", q: "¿Qué sonda china logró en 2019 el primer alunizaje controlado en la cara oculta de la Luna?", a: "Chang'e 4 (con el rover Yutu-2)." },
+          { id: "P160", level: "Desafío", q: "¿Qué partícula hipotética o señal busca el programa SETI en el cosmos?", a: "Señales de radio de inteligencia extraterrestre." }
+        ]
+      }
+    ];
+
+    function getBadgeClass(level) {
+      switch(level) {
+        case 'Fácil': return 'badge-facil';
+        case 'Intermedio': return 'badge-intermedio';
+        case 'Avanzado': return 'badge-avanzado';
+        case 'Argentina': return 'badge-argentina';
+        default: return 'badge-desafio';
+      }
+    }
+
+    const container = document.getElementById('trivia-container');
+
+    triviaData.forEach(blockData => {
+      const blockTitle = document.createElement('div');
+      blockTitle.className = 'block-title';
+      blockTitle.id = blockData.id; // Asigna el ID para los enlaces del índice
+      blockTitle.innerText = blockData.block;
+      container.appendChild(blockTitle);
+
+      blockData.items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => {
+          const ans = card.querySelector('.answer');
+          ans.style.display = ans.style.display === 'block' ? 'none' : 'block';
+        };
+
+        card.innerHTML = `
+          <div class="q-header">
+            <span>Pregunta ${item.id}</span>
+            <span class="badge ${getBadgeClass(item.level)}">${item.level}</span>
+          </div>
+          <div class="q-text">${item.q}</div>
+          <div class="answer">R: ${item.a}</div>
+        `;
+        container.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>
